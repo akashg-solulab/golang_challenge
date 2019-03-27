@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"fmt"
+	"log"
 	. "github.com/akashg-solulab/golang_challenge/models"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -27,8 +27,8 @@ func (m *ProductsDAO) Connect() {
 	db = session.DB(m.Database)
 }
 
-func (m *ProductsDAO) FindAll() ([]Coffee_Machine, error) {
+func (m *ProductsDAO) FindAll(product string) ([]Coffee_Machine, error) {
 	var cm []Coffee_Machine
-	err := db.C(COLLECTION).Find(bson.M{}).All(&cm)
+	err := db.C(COLLECTION).Find(bson.M{"product": product}).All(&cm)
 	return cm, err
 }

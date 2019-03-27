@@ -19,7 +19,7 @@ var dao = ProductsDAO{}
 
 func FindProducts(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var product Products
+	var product Coffee_Machine
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
@@ -30,7 +30,7 @@ func FindProducts(w http.ResponseWriter, r *http.Request) {
 	// }
 	fmt.Println("hello world",product)
 	
-	respondWithJson(w, http.StatusCreated, movie)
+	respondWithJson(w, http.StatusCreated, product)
 }
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {
@@ -43,11 +43,14 @@ func respondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(response)
 }
+
+
+
 func FindSuggestionEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	var cm Coffee_Machine
-	fmt.Printf("paramsparams: %s",r.Body)
-
+	body := mux.Vars(r)
+		fmt.Printf("paramsparam",body)
 
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&cm); err != nil {
@@ -58,7 +61,14 @@ func FindSuggestionEndpoint(w http.ResponseWriter, r *http.Request) {
 	cm.ID = bson.NewObjectId()
 
 		fmt.Printf("paramsparams: %s",cm.Product)
+		coffee_machines, err := dao.FindAll(cm.Product)
+		fmt.Printf("paramsparams: %s",coffee_machines)
 
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		respondWithJson(w, http.StatusOK, coffee_machines)
 	
 
 	// params := mux.Vars(r)
@@ -132,6 +142,8 @@ func FindSuggestionEndpoint(w http.ResponseWriter, r *http.Request) {
 	// respondWithJson(w, http.StatusOK, movie)
 
 }
+
+
 // Parse the configuration file 'config.toml', and establish a connection to DB
 func init() {
 	config.Read()
@@ -144,19 +156,10 @@ func init() {
 
 // Define HTTP request routes
 func main() {
-<<<<<<< HEAD
 	// log.Fatal("hello")
 	
 	r := mux.NewRouter()
-	r.HandleFunc("/task", FindSuggestionEndpoint).Methods("GET")
-=======
-
-	r := mux.NewRouter();
-	r.HandleFunc("/products", FindProducts).Methods("POST")
-	if err := http.ListenAndServe(":3000", r); err != nil {
-		log.Fatal(err)
-	}
->>>>>>> origin/master
+	r.HandleFunc("/task", FindSuggestionEndpoint).Methods("POST")
 	
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)

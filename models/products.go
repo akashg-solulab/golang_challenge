@@ -4,7 +4,7 @@ import "gopkg.in/mgo.v2/bson"
 
 // Represents a movie, we uses bson keyword to tell the mgo driver how to name
 // the properties in mongodb document
-type Coffee_Machine struct {
+type Products struct {
 	ID                         bson.ObjectId `bson:"_id" json:"id"`
 	Product                    string        `bson:"product" json:"product"`
 	ProductType                string        `bson:"product_type" json:"product_type"`

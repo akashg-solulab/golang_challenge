@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"log"
+	"fmt"
 	. "github.com/akashg-solulab/golang_challenge/models"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"

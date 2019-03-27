@@ -15,7 +15,7 @@ type ProductsDAO struct {
 var db *mgo.Database
 
 const (
-	COLLECTION = "products"
+	COLLECTION = "Coffee_Machine"
 )
 
 // Establish a connection to database
@@ -25,4 +25,10 @@ func (m *ProductsDAO) Connect() {
 		log.Fatal(err)
 	}
 	db = session.DB(m.Database)
+}
+
+func (m *ProductsDAO) FindAll() ([]Coffee_Machine, error) {
+	var cm []Coffee_Machine
+	err := db.C(COLLECTION).Find(bson.M{}).All(&cm)
+	return cm, err
 }
